@@ -20,8 +20,8 @@ A simulator that can manage real-time tasks, each with specific execution times 
 - **Distributed Scheduling:** Extend the scheduler to manage tasks across multiple nodes, handling node-specific task assignments and ensuring effective load balancing and fault tolerance.
 
 ### Suggested MVP Steps
-1. **Setup Basic Environment:** Establish the basic Python project structure, integrating necessary libraries for thread management and file handling. NOT GOING TO HANDLE FILES WITH THE TASKS**
-2. **Task Structure Definition:** Define a Python structure for tasks, including attributes like ID, priority, (execution time, and deadline.) (PENDING)
+1. **Setup Basic Environment:** Establish the basic Python project structure, integrating necessary libraries.
+2. **Task Structure Definition:** Define a Python structure for tasks, including attributes like ID, priority/deadline, complexity (big-O notation)/execution time.
 3. **Scheduler Implementation:** Write the core functions to add tasks to the system, TEST DIFFERENT scheduling algorithmS, and execute tasks according to the algorithm's logic.
 4. **Distributed Environment Setup:** Simulate a distributed environment with multiple nodes, and implement functionality for tasks to be assigned and executed across these nodes.
 (MAKE IT EASIER: USE MULTICLIENT CAPABILITIES AND TEST WITH MORE THAN ONE TERMINAL)
