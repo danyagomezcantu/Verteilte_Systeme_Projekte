@@ -1,5 +1,9 @@
 import sorting
 import time
+
+#TODO: if we were to implement scheduling strategy "round robin"
+# we would have to be able to stop a tasks, save it's progress (number array)
+# and readd it to the tasks queue
 class task:
     def __init__(self, dataset):
         self.dataset = dataset
