@@ -1,11 +1,17 @@
 import queue
 import apscheduler as sch
-import sorting
-import numpy as np
-import pandas as pd
 from task import *
 import threading as thread
-#HOW DO I IMPORT task.py???
+from collections import deque
+
+
+#TODO: what parameters can we use to schedule different tasks?
+#TODO: are there any easy-to-implement schedulers to reuse?
+#TODO: Can't we just "schedule" by rearranging the tasks_queue
+# by different parameters like:
+# -estimated time
+# -priority
+# -first come first serve (basically : leave as-is
 
 
 thread1 =   0
@@ -24,50 +30,14 @@ tasks = queue.Queue
 metrics = []
 def assign_thread1(task):
     queue_thread1.put(task)
-
 def assign_thread2(task):
     queue_thread2.put(task)
-
-def create_queue(dataset):
-    '''
-    Wir müssen eine Queue an Tasks erstellen, deren Elemente an die Threads übergeben werden.
-    Wird ein Element übergeben, wird es aus der Queue entfernt.
-    Gibt es keine Elemente in der Queue und die Threads haben ihre Aufgaben erfüllt,
-    dann soll das Hauptprogrmam beendet werden
-    :return:
-    '''
-    tasks.put(bubblesort(dataset))
-    tasks.put(insertion_sort(dataset))
-    tasks.put(merge_sort(dataset))
-    tasks.put(quick_sort(dataset))
-
-    '''
-    Optionally:
-    We give an array with the tasks we want to instantialise, e.g.:
-    [bubblesort, quicksort,etc...}
-    for t in tasks:
-        task = t.initialise()
-        tasks.append(task)
-    '''
-
-def create_dataset(start=1, end=101, size=200):
-    print("generating "+str(size)+" numbers between "+str(start)+" and "+str(size))
-
-    array = np.random.randint(start, end, size)
-    df = pd.DataFrame(array)
-    df.to_csv("dataset.csv", index=False)
-
-
-def dataset_to_array(dataset = "dataset.csv"):
-    dataframe = pd.read_csv(dataset)
-    return dataframe.to_numpy()
-
 def execute(tasks):
     '''
     This is the function which keeps the thread going.
     It executes all things in the queue.
     Is it filled with tasks, it executes them
-    Is it filled with a None-Element, then it shuts down
+    Is it filled with a None-Element, it waits for the clients to finish, terminates them and shuts down
 
     :param tasks: A queue full of instances of the class task
     :return:
@@ -86,9 +56,59 @@ def execute(tasks):
         task.sort()
         working = 0
 
-#TODO: Main - no idea yet
-def main():
-    create_dataset(1,301, 200)
-    dataset = dataset_to_array()
-    create_queue(dataset)
-    pass
+def test_connection(client):
+    '''
+    sends a message to client to confirm a working connection
+    :param client:
+    :return: true/false
+    '''
+    return
+class scheduler():
+    def __init__(self, tasks, clients):
+        #converts an array into a queue
+        self.tasks = deque(tasks)
+        self.clients = clients
+
+    def check_clients(self):
+        '''
+        checks whether a client is ready for the next task or not
+        :return:
+        '''
+        pass
+
+    def _check_client_availability(self, client):
+        '''
+        Checks whether a client is ready for the next task or not.
+        A client API to check is needed.
+        :param client:
+        :return: working or waiting
+        '''
+    @abstractmethod
+    def start(self):
+        '''
+        basically the main function of the scheduler
+        executes all tasks
+        if no tasks are available, waits for all clients to finish
+        if the clients are finished, terminates them
+        :return:
+        '''
+        pass
+
+    def terminate_clients(self):
+        for client in self.clients:
+            #send termination message via communication API
+            pass
+        return
+
+class FCFS_scheduler(scheduler):
+    ''''
+    First Come First Serve implementation of scheduler class
+    '''
+    def execute(self):
+        while len(self.tasks) > 0:      #checks whether tasks are left
+            '''
+            check availability of clients
+            assert task onto clients
+            
+            '''
+        pass
