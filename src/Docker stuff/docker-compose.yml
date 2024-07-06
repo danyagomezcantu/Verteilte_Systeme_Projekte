@@ -1,0 +1,10 @@
+version: '3.8'
+services:
+  app:
+    image: rastasheep/ubuntu-sshd:latest
+    volumes:
+      - ./src:/app
+    working_dir: /app
+    command: python3 main.py
+    ports:
+      - "5678:5678"
