@@ -2,7 +2,17 @@ import numpy as np
 import pandas as pd
 from task import *
 from task_scheduler import *
-def select_scheduler():
+
+'''
+The main will be executed on the comuter itself.
+    1. generate or select dataset
+    2. generate tasks
+    3. select scheduler
+    4. connect clients
+    5. start tasks execution via scheduler
+    6. terminate clients and end main
+'''
+def select_scheduler(tasks, clients):
     print("Finally what kind of scheduler do you want to use?")
     print("Option 1:    First Come First Serve")
     print("Option 2:    Shortest Job First")
@@ -12,7 +22,7 @@ def select_scheduler():
     match option:
         case "1":
             #create FCFS scheduler
-            return FCFS_scheduler
+            return FCFS_scheduler(tasks,clients)
         case "2":
             #create SJF scheduler
             return
@@ -85,21 +95,23 @@ def _dataset_to_array(dataset = "dataset.csv"):
     return dataframe.to_numpy()
 
 def main():
-    '''
-    MAIN PROGRAM ROUTINE
-    1. generate or select dataset
-    2. generate tasks
-    3. select scheduler
-    4. start tasks execution via scheduler
-    :return:
-    '''
+
     dataset = gen_dataset()
     tasks = select_tasks(dataset)
     scheduler = select_scheduler(tasks)
 
+def create_client():
+    '''TODO: Complete this function to make it easier creating a client
+        :param ip address and such
+        :return returns a client object
+    '''
+
 def test():
     dataset = _dataset_to_array()
     tasks = select_tasks(dataset)
-    scheduler = select_scheduler()
+    client1 = create_client()
+    client2 = create_client()
+    scheduler = select_scheduler(tasks,[client1,client2])
+
 if __name__ == "__main__":
     test()

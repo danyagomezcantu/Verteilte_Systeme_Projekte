@@ -3,86 +3,40 @@ import apscheduler as sch
 from task import *
 import threading as thread
 from collections import deque
+from enum import Enum
 
 
-#TODO: what parameters can we use to schedule different tasks?
-#TODO: are there any easy-to-implement schedulers to reuse?
-#TODO: Can't we just "schedule" by rearranging the tasks_queue
-# by different parameters like:
-# -estimated time
-# -priority
-# -first come first serve (basically : leave as-is
-
-
-thread1 =   0
-thread2 =   0
-
-queue_thread1 = queue.Queue()
-queue_thread2 = queue.Queue()
-
-tasks = queue.Queue
-
-#TODO: Array for the performance metrics
-#The metric will be stored in here
-#task name
-#execution time
-#service time
-metrics = []
-def assign_thread1(task):
-    queue_thread1.put(task)
-def assign_thread2(task):
-    queue_thread2.put(task)
-def execute(tasks):
-    '''
-    This is the function which keeps the thread going.
-    It executes all things in the queue.
-    Is it filled with tasks, it executes them
-    Is it filled with a None-Element, it waits for the clients to finish, terminates them and shuts down
-
-    :param tasks: A queue full of instances of the class task
-    :return:
-    '''
-    working = 0
-    while True:
-        try:
-            task = tasks.get_nowait()
-        except queue.Empty:
-            continue
-
-        if task is None:
-            print("Queue is None - ending Thread!")
-            break
-        working = 1
-        task.sort()
-        working = 0
-
-def test_connection(client):
-    '''
-    sends a message to client to confirm a working connection
-    :param client:
-    :return: true/false
-    '''
-    return
+class status(Enum):
+    WORKING = "working"
+    WAITING = "waiting"
 class scheduler():
     def __init__(self, tasks, clients):
         #converts an array into a queue
         self.tasks = deque(tasks)
         self.clients = clients
-
+    def _test_connection(client):
+        '''
+        TODO: send API request to client. Look: point 3 of client __innit__()
+        '''
+        answer = None #
+        return answer
+    def _assisgn_task(self,client, task):
+        '''
+        TODO: send API request to client. Look: point 4 of client __innit__()
+        '''
+        #client.
     def check_clients(self):
         '''
+        TODO: Send API request to client. Look: point 2 of client __innit__()
         checks whether a client is ready for the next task or not
-        :return:
+        :return: a list of clients who are ready for the next task
         '''
-        pass
-
-    def _check_client_availability(self, client):
-        '''
-        Checks whether a client is ready for the next task or not.
-        A client API to check is needed.
-        :param client:
-        :return: working or waiting
-        '''
+        ready_clients = []
+        for client in self.clients:
+            state = None #call get_status API of client
+            if state is status.WAITING:
+               ready_clients.append(client)
+        return ready_clients
     @abstractmethod
     def start(self):
         '''
@@ -90,12 +44,14 @@ class scheduler():
         executes all tasks
         if no tasks are available, waits for all clients to finish
         if the clients are finished, terminates them
-        :return:
+        DO NOT EDIT THIS FUNCTION - THERE IS NO NEED
         '''
-        pass
-
     def terminate_clients(self):
+        '''
+        TODO: send API request to client. Look: point 1 of client __innit__()
+        '''
         for client in self.clients:
+
             #send termination message via communication API
             pass
         return
@@ -105,9 +61,21 @@ class FCFS_scheduler(scheduler):
     First Come First Serve implementation of scheduler class
     '''
     def execute(self):
-        while len(self.tasks) > 0:      #checks whether tasks are left
-            '''
-            check availability of clients
-            assert task onto clients
-            '''
-        pass
+        if len(self.check_clients()) > 0:           #"clients available?"
+            while len(self.tasks) > 0:              #"tasks available?"
+                clients = self.check_clients()
+                if clients == []:
+                    continue
+                for client in clients:
+                    task = self.tasks.popleft()
+                    self._assisgn_task(client, task)
+                    pass
+            print("no more tasks available. Waiting for clients to finish...")
+            while (len(self.clients) != len(self.check_clients())):
+                #This loop waits until all clients are done
+                continue
+            for client in self.clients:
+                self.terminate_clients()
+                pass
+        else:
+            print('No clients available')

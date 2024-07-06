@@ -2,10 +2,6 @@ import sorting
 import time
 from abc import ABC, abstractmethod
 
-#TODO: if we were to implement scheduling strategy "round robin"
-# we would have to be able to stop a tasks, save it's progress (number array)
-# and readd it to the tasks queue
-
 '''Average Time complexity table:
 3:  O(n²)
 2:  O(n*log(n)
@@ -29,7 +25,6 @@ class task(ABC):
         pass
     def get_time_complexity(self):
         return self.time_complexity
-
     def sort(self):
         self._start()
         self._sort()

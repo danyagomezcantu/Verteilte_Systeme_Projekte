@@ -5,7 +5,7 @@ The Idea for client.py is that it is implemented on the Docker containers to:
 1. wait for tasks
 2. execute tasks
 3. update execution status & return execution metrics
-
+It's basically the main function for the docker container
 '''
 class status(Enum):
     WORKING = "working"
@@ -13,23 +13,50 @@ class status(Enum):
 
 class client():
     def __init__(self):
+        '''TODO: Implement a socket for communication'''
         self.comm = None #Communication Interface for task submission, status query or client termination
+        '''
+        The communication should feature a port/command for:
+        1. Termination of the container via _terminate()
+        2. Status request via get_status()
+        3. connection testing via _isconnected()
+        4. receive task via _add_task()
+        '''
         self.status = status.WAITING
         self.tasks = queue.Queue
-        pass
-
+        self.terminated = 0         #terminated is the variable which ends the loop and therefore terminates the client
+        self.start()
+    def _add_task(self, task):
+        self.tasks.put(task)
+    def _isconnected(self):
+        '''
+        If the message is being received it returns True.
+        :return:
+        '''
+        return True
     def _tasks_available(self):
         if len(self.tasks) > 0:
             return True
         else:
             return False
+    def _terminate(self):
+        '''
+        TODO: Is there a way to terminate/stop docker containers?
+        If there is a way to destroy a docker container this might be the function for it
+        '''
+        pass
     def get_status(self):
         return self.status
-
-    def execute(self):
+    def start(self):
+        '''TODO: I think the connect the API needs to be started here'''
         self.status = status.WORKING
-        pass
-
+        while not self.terminated:
+            task = self.tasks.get()
+            if task is None:
+                self.status = status.WAITING
+            else:
+                task.sort()
+        self._terminate()
 '''
 I am currently not sure on how to communicate between scheduler and clients.
 First of all: 
