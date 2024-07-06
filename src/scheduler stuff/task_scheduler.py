@@ -109,6 +109,5 @@ class FCFS_scheduler(scheduler):
             '''
             check availability of clients
             assert task onto clients
-            
             '''
         pass
