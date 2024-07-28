@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 from task import *
 from task_scheduler import *
+import docker
 
 '''
 The main will be executed on the comuter itself.
@@ -93,25 +94,27 @@ def _dataset_to_csv(array):
 def _dataset_to_array(dataset = "dataset.csv"):
     dataframe = pd.read_csv(dataset)
     return dataframe.to_numpy()
-
-def main():
-
-    dataset = gen_dataset()
-    tasks = select_tasks(dataset)
-    scheduler = select_scheduler(tasks)
-
-def create_client():
-    '''TODO: Complete this function to make it easier creating a client
-        :param ip address and such
-        :return returns a client object
+def create_client(dock):
+    try:
+        container = dock.containers.run(
+            image="vs_client",  #the name of the image I created in the dockerfile
+            detach=True,
+            ports={5000: None}) #Container-port is 5000 Host-port is generated randomly
+    except:
+        print("Container failed to run")
     '''
-
-def test():
-    dataset = _dataset_to_array()
-    tasks = select_tasks(dataset)
-    client1 = create_client()
-    client2 = create_client()
-    scheduler = select_scheduler(tasks,[client1,client2])
+        TODO: The Container ID's don't match those shown in docker Desktop!!!!
+        This is the root cause that NO API WORKS right now.
+        Without the right ID we're not able to retrieve the necessary information'''
+    return container.id
 
 if __name__ == "__main__":
-    test()
+    dock = docker.from_env()
+    dataset = _dataset_to_array()
+    tasks = select_tasks(dataset)
+    client1 = create_client(dock)
+    print(client1)
+    client2 = create_client(dock)
+    print(client2)
+    scheduler = select_scheduler(tasks, [client1, client2])
+    scheduler.execute()

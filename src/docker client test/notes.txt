@@ -1,0 +1,5 @@
+If my code is correctly working then the only thing that is left is the communication between the container 'clients' and the main-script.
+
+The main creates the containers but the code running in the container doesn't know in wich container it is being executed.
+For short:
+The client.py script doesn't know what port to listen to.

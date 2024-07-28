@@ -4,17 +4,45 @@ from task import *
 import threading as thread
 from collections import deque
 from enum import Enum
+import requests
+import docker
+'''
+TODO: save host- and container ports per client
+'''
 
+'''
+The service was defined on Port 5000.
+This is not good practice but I (supposedly) need the container port to map onto the hostpath'''
+CONTAINER_PORT = '5000/tcp'
 
+docker = docker.from_env()
+def _get_host_port(id):
+    """
+       Funktion zum Abrufen des Host-Ports, der mit einem bestimmten Container-Port verbunden ist.
+       :param container: Docker-Container-Objekt
+       :param container_port: Der Port im Container (z.B. '5000/tcp')
+       :return: Der zugewiesene Host-Port als String oder None, wenn nicht vorhanden
+       """
+    container = docker.containers.get(id)
+    ports = container.attrs['NetworkSettings']['Ports']
+    port_info = ports.get(CONTAINER_PORT)
+    if port_info and port_info[0]:
+        return port_info[0]['HostPort']
+    print("Error! could not retrieve Hostport")
+    return None
+def _get_client_ip(id):
+    hostport = _get_host_port(id)
+    return f"http://localhost:{hostport}"
 class status(Enum):
     WORKING = "working"
     WAITING = "waiting"
-class scheduler():
+class scheduler(ABC):
     def __init__(self, tasks, clients):
         #converts an array into a queue
         self.tasks = deque(tasks)
-        self.clients = clients
-    def _test_connection(client):
+        self.client_ids = clients
+
+    def _test_connection(self, client):
         '''
         TODO: send API request to client. Look: point 3 of client __innit__()
         '''
@@ -23,34 +51,35 @@ class scheduler():
     def _assisgn_task(self,client, task):
         '''
         TODO: send API request to client. Look: point 4 of client __innit__()
+        PROBLEM: The API is not capable of receiving task objects
+        Solution: Let the API itself create a task in the container
         '''
-        #client.
+    @abstractmethod
+    def execute(self):
+        pass
     def check_clients(self):
         '''
         TODO: Send API request to client. Look: point 2 of client __innit__()
         checks whether a client is ready for the next task or not
         :return: a list of clients who are ready for the next task
+        need:
+        - HOST-port
+        -ip (localhost)
+        -url-path
         '''
         ready_clients = []
-        for client in self.clients:
-            state = None #call get_status API of client
+        for client in self.client_ids:
+            clien_ip = _get_client_ip(client)
+            url = f"{clien_ip}/status"
+            state = requests.get(url)
             if state is status.WAITING:
                ready_clients.append(client)
         return ready_clients
-    @abstractmethod
-    def start(self):
-        '''
-        basically the main function of the scheduler
-        executes all tasks
-        if no tasks are available, waits for all clients to finish
-        if the clients are finished, terminates them
-        DO NOT EDIT THIS FUNCTION - THERE IS NO NEED
-        '''
     def terminate_clients(self):
         '''
         TODO: send API request to client. Look: point 1 of client __innit__()
         '''
-        for client in self.clients:
+        for client in self.client_ids:
 
             #send termination message via communication API
             pass
@@ -71,10 +100,10 @@ class FCFS_scheduler(scheduler):
                     self._assisgn_task(client, task)
                     pass
             print("no more tasks available. Waiting for clients to finish...")
-            while (len(self.clients) != len(self.check_clients())):
+            while (len(self.client_ids) != len(self.check_clients())):
                 #This loop waits until all clients are done
                 continue
-            for client in self.clients:
+            for client in self.client_ids:
                 self.terminate_clients()
                 pass
         else:

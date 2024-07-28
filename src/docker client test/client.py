@@ -1,5 +1,7 @@
+import docker
 import queue
 from enum import Enum
+from flask import Flask, jsonify, request
 '''
 The Idea for client.py is that it is implemented on the Docker containers to:
 1. wait for tasks
@@ -13,7 +15,6 @@ class status(Enum):
 
 class client():
     def __init__(self):
-        '''TODO: Implement a socket for communication'''
         self.comm = None #Communication Interface for task submission, status query or client termination
         '''
         The communication should feature a port/command for:
@@ -23,10 +24,10 @@ class client():
         4. receive task via _add_task()
         '''
         self.status = status.WAITING
-        self.tasks = queue.Queue
-        self.terminated = 0         #terminated is the variable which ends the loop and therefore terminates the client
+        self.tasks = queue.Queue()
+        self.terminated = 0        #terminated is the variable which ends the loop and therefore terminates the client
         self.start()
-    def _add_task(self, task):
+    def add_task(self, task):
         self.tasks.put(task)
     def _isconnected(self):
         '''
@@ -35,28 +36,48 @@ class client():
         '''
         return True
     def _tasks_available(self):
-        if len(self.tasks) > 0:
-            return True
-        else:
+        if self.tasks.empty():
             return False
-    def _terminate(self):
+        else:
+            True
+    def terminate(self):
         '''
         TODO: Is there a way to terminate/stop docker containers?
         If there is a way to destroy a docker container this might be the function for it
         '''
-        pass
+        self.terminated = 1
     def get_status(self):
         return self.status
     def start(self):
+        print("test")
         '''TODO: I think the connect the API needs to be started here'''
         self.status = status.WORKING
         while not self.terminated:
-            task = self.tasks.get()
-            if task is None:
-                self.status = status.WAITING
-            else:
+            if self._tasks_available():
+                task = self.tasks.get()
                 task.sort()
-        self._terminate()
+            else:
+                self.status = status.WAITING
+
+class API():
+    def __init__(self, client):
+        self.app = Flask(__name__)
+        self.client = client
+    @app.route('/status',methods=['GET'])
+    def status(self):
+        self.client.get_status()
+
+    @app.route('/terminate', methods=['POST'])
+    def terminate(self):
+        self.client.terminate()
+
+    @app.route('/add_task', methods=['POST'])
+    def add_task(self):
+        self.client.add_task()
+
+
+client = client()
+api = API(client)
 '''
 I am currently not sure on how to communicate between scheduler and clients.
 First of all: 
@@ -70,3 +91,6 @@ I tend to prefer the scheduler to check the clients status since it's his job to
 Based on this preference I have to guarantee that the client leaves a communication channel always open
 to be checked on the working status.
 '''
+
+if __name__ == '__main__':
+    client.start()
