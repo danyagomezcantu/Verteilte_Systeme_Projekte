@@ -113,8 +113,6 @@ if __name__ == "__main__":
     dataset = _dataset_to_array()
     tasks = select_tasks(dataset)
     client1 = create_client(dock)
-    print(client1)
     client2 = create_client(dock)
-    print(client2)
     scheduler = select_scheduler(tasks, [client1, client2])
     scheduler.execute()

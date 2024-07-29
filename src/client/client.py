@@ -1,7 +1,7 @@
-import docker
 import queue
 from enum import Enum
-from flask import Flask, jsonify, request
+import threading
+from REST_API import API
 '''
 The Idea for client.py is that it is implemented on the Docker containers to:
 1. wait for tasks
@@ -59,25 +59,6 @@ class client():
             else:
                 self.status = status.WAITING
 
-class API():
-    def __init__(self, client):
-        self.app = Flask(__name__)
-        self.client = client
-    @app.route('/status',methods=['GET'])
-    def status(self):
-        self.client.get_status()
-
-    @app.route('/terminate', methods=['POST'])
-    def terminate(self):
-        self.client.terminate()
-
-    @app.route('/add_task', methods=['POST'])
-    def add_task(self):
-        self.client.add_task()
-
-
-client = client()
-api = API(client)
 '''
 I am currently not sure on how to communicate between scheduler and clients.
 First of all: 
@@ -93,4 +74,10 @@ to be checked on the working status.
 '''
 
 if __name__ == '__main__':
+    client = client()
+    api = API(client)
+    print("testprint: Is this script even being executed in the container?")
+    client_thread = threading.Thread(target=client.start)
+    client_thread.start()
+    api.run()
     client.start()

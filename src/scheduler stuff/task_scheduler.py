@@ -69,8 +69,9 @@ class scheduler(ABC):
         '''
         ready_clients = []
         for client in self.client_ids:
-            clien_ip = _get_client_ip(client)
-            url = f"{clien_ip}/status"
+            client_ip = _get_client_ip(client)
+            url = f"{client_ip}/status"
+            print(f"Sending status request to {url}")
             state = requests.get(url)
             if state is status.WAITING:
                ready_clients.append(client)
