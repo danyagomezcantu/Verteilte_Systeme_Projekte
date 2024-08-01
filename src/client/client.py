@@ -51,12 +51,15 @@ class client():
     def start(self):
         print("test")
         '''TODO: I think the connect the API needs to be started here'''
+        #TODO: Do we make adding tasks dependend on the state or the queue itself?
         self.status = status.WORKING
         while not self.terminated:
             if self._tasks_available():
                 task = self.tasks.get()
                 task.sort()
             else:
+                #With the state I can make sure when no more tasks are available
+                #the client does not get interrupted while working
                 self.status = status.WAITING
 
 '''

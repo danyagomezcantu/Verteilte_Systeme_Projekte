@@ -8,7 +8,7 @@ I cannot send Python Objects via Flask to the Client via the API.
 Solutions:
 1. let the taks get created on the client side. The main-skripts sends a json with the necessary information.
 '''
-HOSTPORT = 5000
+CONTAINERPORT = 5000
 
 class API:
     def __init__(self, client):
@@ -18,8 +18,14 @@ class API:
 
     def create_task_from_data(self, data):
         # TODO: Implement this function to convert received JSON data to a task object
+        # we need to import task.py
+        # case switch
         pass
     def setup_routes(self):
+        #TODO: NO GUARANTEE these paths work - generated with ChatGPT
+        # 1. Get Status (working or waiting?)
+        # 2. terminate() --> close container
+        # 3.
         @self.app.route('/status', methods=['GET'])
         def status():
             return jsonify({'status': self.client.get_status().value})
@@ -44,4 +50,4 @@ class API:
         But because the host port is generated randomly there seems to be no option to set ENV variables.
         Creating 2 disctinct containers with static ports would make the project less maintainable.
         '''
-        self.app.run(host='0.0.0.0', port=HOSTPORT)
+        self.app.run(host='0.0.0.0', port=CONTAINERPORT)

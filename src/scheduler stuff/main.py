@@ -19,7 +19,7 @@ def select_scheduler(tasks, clients):
     print("Option 2:    Shortest Job First")
     print("Option 3:    Round Robin")
     option = input()
-
+    #TODO: remove other options - we focus only on FCFS
     match option:
         case "1":
             #create FCFS scheduler
@@ -33,9 +33,6 @@ def select_scheduler(tasks, clients):
         case default:
             print("wrong input please try again")
             select_scheduler()
-    #switch for option 1 to 3: (one option for unknown input)
-    #create scheduler
-    #return scheduler
 
 def select_tasks(dataset):
     print("Now which tasks do you want to schedule?")
