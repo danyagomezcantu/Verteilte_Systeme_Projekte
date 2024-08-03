@@ -16,20 +16,19 @@ The main will be executed on the comuter itself.
 def select_scheduler(tasks, clients):
     print("Finally what kind of scheduler do you want to use?")
     print("Option 1:    First Come First Serve")
-    print("Option 2:    Shortest Job First")
-    print("Option 3:    Round Robin")
+    #print("Option 2:    Shortest Job First")
+    #print("Option 3:    Round Robin")
     option = input()
-    #TODO: remove other options - we focus only on FCFS
     match option:
         case "1":
             #create FCFS scheduler
             return FCFS_scheduler(tasks,clients)
-        case "2":
-            #create SJF scheduler
-            return
-        case "3":
-            #create round robin scheduler
-            return
+        # case "2":
+        #     create SJF scheduler
+        #     return
+        # case "3":
+        #     create round robin scheduler
+        #     return
         case default:
             print("wrong input please try again")
             select_scheduler()
@@ -65,6 +64,9 @@ def select_tasks(dataset):
     return tasks
 
 def gen_dataset():
+    '''
+    this method is not used because we're always importing a pre-generated one saved onto the dataset.csv file
+    '''
     #TODO: input security
     print("First you want to generate a dataset of numbers to sort")
     print("Do you want to create a new dataset or use an existing one?\n1: yes\n0: no")
@@ -99,17 +101,16 @@ def create_client(dock):
             ports={5000: None}) #Container-port is 5000 Host-port is generated randomly
     except:
         print("Container failed to run")
-    '''
-        TODO: The Container ID's don't match those shown in docker Desktop!!!!
-        This is the root cause that NO API WORKS right now.
-        Without the right ID we're not able to retrieve the necessary information'''
     return container.id
 
 if __name__ == "__main__":
     dock = docker.from_env()
+
     dataset = _dataset_to_array()
     tasks = select_tasks(dataset)
+
     client1 = create_client(dock)
     client2 = create_client(dock)
+
     scheduler = select_scheduler(tasks, [client1, client2])
     scheduler.execute()

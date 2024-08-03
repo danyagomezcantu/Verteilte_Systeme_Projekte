@@ -28,7 +28,7 @@ class API:
         # 3.
         @self.app.route('/status', methods=['GET'])
         def status():
-            return jsonify({'status': self.client.get_status().value})
+            return jsonify({'status': self.client.get_status()})
 
         @self.app.route('/terminate', methods=['POST'])
         def terminate():
@@ -43,11 +43,5 @@ class API:
             self.client.add_task(task)
             return jsonify({'message': 'Task added'})
     def run(self):
-        '''
-        TODO: We need a way to find out the hostport on which this docker container runs on.
-        The script itself has no idea in which container it is running and therefore has no information about it.
-        There might be the option to set ENV variables during the creation of the container (in the dockerfile itself).
-        But because the host port is generated randomly there seems to be no option to set ENV variables.
-        Creating 2 disctinct containers with static ports would make the project less maintainable.
-        '''
-        self.app.run(host='0.0.0.0', port=CONTAINERPORT)
+        self.app.run(host='0.0.0.0', port=CONTAINERPORT, debug=True)
+        print(f"listening on localhost:{CONTAINERPORT}")

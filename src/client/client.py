@@ -26,7 +26,6 @@ class client():
         self.status = status.WAITING
         self.tasks = queue.Queue()
         self.terminated = 0        #terminated is the variable which ends the loop and therefore terminates the client
-        self.start()
     def add_task(self, task):
         self.tasks.put(task)
     def _isconnected(self):
@@ -43,6 +42,9 @@ class client():
     def terminate(self):
         '''
         TODO: Is there a way to terminate/stop docker containers?
+        yes:
+        -container_object.kill()
+        -.stop()
         If there is a way to destroy a docker container this might be the function for it
         '''
         self.terminated = 1
@@ -50,7 +52,7 @@ class client():
         return self.status
     def start(self):
         print("test")
-        '''TODO: I think the connect the API needs to be started here'''
+        ''' TODO: I think the connect the API needs to be started here'''
         #TODO: Do we make adding tasks dependend on the state or the queue itself?
         self.status = status.WORKING
         while not self.terminated:
