@@ -39,7 +39,7 @@ This project involves the development and implementation of a task scheduler des
 
    ```bash
    git clone https://github.com/danyagomezcantu/Verteilte_Systeme_Projekte.git
-   cd task-scheduler-distributed-systems
+   cd Verteilte_Systeme_Projekte
    ```
 
 2. **Set up the virtual environment:**
