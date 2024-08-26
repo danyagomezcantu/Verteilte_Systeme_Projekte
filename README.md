@@ -1,32 +1,123 @@
-# Real-Time Task Scheduler
+# Task Scheduler for Distributed Systems
 
-## Objective
-Design and implement a real-time task scheduler in Python that can simulate scheduling algorithms used in both single-system and distributed real-time operating systems.
+## Project Overview
 
-## Topics
-- Real-time systems
-- Distributed systems
-- Scheduling algorithms (like Rate Monotonic Scheduling, Earliest Deadline First)
-- Task prioritization
+This project involves the development and implementation of a task scheduler designed for distributed systems. The project explores various scheduling algorithms, evaluates their effectiveness, and addresses the challenges encountered during implementation. The scheduler was developed using Python, and Docker containers were utilized to simulate clients in a distributed environment. This setup allows for a flexible and scalable system that can manage tasks across multiple nodes.
 
-## Coding Product
-A simulator that can manage real-time tasks, each with specific execution times and deadlines, and then use different algorithms to schedule these tasks to meet their deadlines across potentially multiple nodes.
+## Table of Contents
 
-## MVP Description: Real-Time Task Scheduler Simulator
-### Core Functionality
-- **Task Creation and Management:** Allow the user to define a set of tasks, each with specific execution times, priorities, and deadlines.
-- **Scheduling Algorithms:** Implement at least two to three real-time scheduling algorithms such as Rate Monotonic Scheduling (RMS) and Earliest Deadline First (EDF). The system should be able to select and switch between these algorithms dynamically based on user input.
-- **Task Execution Simulation:** Simulate the execution of tasks according to the selected scheduling algorithm, showing how tasks are prioritized and handled.
-- **Distributed Scheduling:** Extend the scheduler to manage tasks across multiple nodes, handling node-specific task assignments and ensuring effective load balancing and fault tolerance.
+1. [Project Overview](#project-overview)
+2. [Features](#features)
+3. [Installation](#installation)
+4. [Usage](#usage)
+5. [Scheduling Algorithms](#scheduling-algorithms)
+6. [System Architecture](#system-architecture)
+7. [Testing](#testing)
+8. [Results and Discussion](#results-and-discussion)
+9. [Contributing](#contributing)
+10. [License](#license)
+11. [Acknowledgments](#acknowledgments)
 
-### Suggested MVP Steps
-1. **Setup Basic Environment:** Establish the basic Python project structure, integrating necessary libraries.
-2. **Task Structure Definition:** Define a Python structure for tasks, including attributes like ID, priority/deadline, complexity (big-O notation)/execution time.
-3. **Scheduler Implementation:** Write the core functions to add tasks to the system, TEST DIFFERENT scheduling algorithmS, and execute tasks according to the algorithm's logic.
-4. **Distributed Environment Setup:** Simulate a distributed environment with multiple nodes, and implement functionality for tasks to be assigned and executed across these nodes.
-(MAKE IT EASIER: USE MULTICLIENT CAPABILITIES AND TEST WITH MORE THAN ONE TERMINAL)
-5. **Logging System:** Implement a logging system that writes task states and scheduler decisions to a file, including details about inter-node operations and fault handling.
-(LOG IT AS EASY AS POSSIBLE WITH THE ATTRIBUTES)
-// (INSTEAD OF PERSONALIZED UI LET'S USE TERMINAL) 6. **User Interface:** Create a command-line interface that allows users to input task parameters, select a scheduling algorithm, configure nodes, and start the simulation.
-TEST WITH THE SAME TASKS FOR CONTROL, HARDCODE THEM INSTEAD OF INPUT
-7. **Testing and Validation:** Simulate scenarios with varying numbers of tasks and nodes to test the efficiency of the scheduler in a distributed setting.
+## Features
+
+- **Multiple Scheduling Algorithms:** Implementation of various scheduling algorithms, including Round Robin, First-Come, First-Served (FCFS), Priority Scheduling, and Shortest Job Next (SJN).
+- **Distributed Environment Simulation:** Simulation of a distributed environment using Docker containers, facilitating the testing of task scheduling across multiple nodes.
+- **Scalable Architecture:** A flexible system architecture that allows for easy scalability, supporting the addition of more nodes as needed.
+- **Comprehensive Testing Suite:** A testing suite to evaluate the performance of different scheduling algorithms under various conditions.
+
+## Installation
+
+### Prerequisites
+
+- Python 3.11.0
+- Docker
+- Git
+
+### Steps
+
+1. **Clone the repository:**
+
+   ```bash
+   git clone https://github.com/danyagomezcantu/Verteilte_Systeme_Projekte.git
+   cd task-scheduler-distributed-systems
+   ```
+
+2. **Set up the virtual environment:**
+
+   ```bash
+   python3 -m venv env
+   source env/bin/activate
+   ```
+
+3. **Install the required Python packages:**
+
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+4. **Build Docker containers:**
+
+   ```bash
+   docker-compose up --build
+   ```
+
+## Usage
+
+### Running the Scheduler
+
+1. **Start the system:**
+
+   ```bash
+   python main.py
+   ```
+
+2. **Configure scheduling algorithm:**
+
+   The scheduler supports multiple algorithms. To choose an algorithm, modify the `config.py` file:
+
+   ```python
+   SCHEDULING_ALGORITHM = 'RoundRobin'  # Options: 'RoundRobin', 'FCFS', 'Priority', 'SJN'
+   ```
+
+3. **Monitor the system:**
+
+   The logs and outputs will be displayed in the terminal and also saved to the `logs/` directory.
+
+## Scheduling Algorithms
+
+- **Round Robin:** Cycles through tasks in a fixed order, distributing them evenly across available nodes.
+- **First-Come, First-Served (FCFS):** Tasks are handled in the order they arrive.
+- **Priority Scheduling:** Tasks are assigned based on predefined priorities.
+- **Shortest Job Next (SJN):** Tasks with the shortest execution time are scheduled first.
+
+## System Architecture
+
+The system architecture consists of a master node responsible for task distribution and several worker nodes that execute the tasks. Docker containers were used to simulate these nodes, allowing for easy scalability and isolation of the different components.
+
+- **Master Node:** Manages task distribution and algorithm selection.
+- **Worker Nodes:** Execute the tasks based on the selected scheduling algorithm.
+
+## Testing
+
+The system includes a comprehensive testing suite that simulates various load conditions to evaluate the performance of different scheduling algorithms. To run the tests:
+
+```bash
+python -m unittest discover tests/
+```
+
+## Results and Discussion
+
+Our testing revealed that the Round Robin and Priority Scheduling algorithms provided the most balanced performance in terms of task distribution and resource utilization. FCFS was simple to implement but often led to inefficiencies under heavy loads. SJN, while optimal in theory, was challenging to implement in a dynamic environment where task execution times were not known in advance.
+
+## Contributing
+
+We welcome contributions! Please fork the repository, create a new branch, and submit a pull request. Ensure that your code adheres to our coding standards and includes appropriate tests.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Acknowledgments
+
+- Special thanks to our advisors and peers who provided invaluable feedback during the project.
+- The research and development of this project were supported by the distributed systems community and various open-source tools.
