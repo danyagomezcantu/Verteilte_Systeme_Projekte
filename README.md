@@ -55,14 +55,6 @@ The project is a work in progress with several areas identified for future impro
 - **Enhance Error Handling:** Introduce comprehensive error handling across all components of the system.
 - **Performance Testing:** Conduct thorough testing and benchmarking to evaluate the performance of different scheduling strategies.
 
-## Contributing
-
-Contributions are welcome! Please submit a pull request or open an issue to discuss any changes or additions.
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
 ## Contact
 
 - Danya Gómez - [danya_carolina.gomez_cantu@smail.th-koeln.de](mailto:danya_carolina.gomez_cantu@smail.th-koeln.de)
