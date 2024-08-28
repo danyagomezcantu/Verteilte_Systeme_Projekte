@@ -115,3 +115,12 @@ class bucket_sort(task):
         super().__init__(dataset, time_complexity=1)
     def _sort(self):
         sorting.bucket(self.dataset)
+
+def task_to_json():
+    '''
+    TODO: implement function to enable sending tasks via API. The client converts
+        it back to task
+    info needed:
+    - what kind of task?
+    - dataset
+    '''

@@ -1,7 +1,4 @@
-import queue
-import apscheduler as sch
 from task import *
-import threading as thread
 from collections import deque
 from enum import Enum
 import requests
@@ -44,15 +41,16 @@ class scheduler(ABC):
 
     def _test_connection(self, client):
         '''
-        TODO: send API request to client. Look: point 3 of client __innit__()
+        Optional for debugging
         '''
         answer = None #
         return answer
-    def _assisgn_task(self,client, task):
+    def assign_task(self, client, task):
         '''
         TODO: send API request to client. Look: point 4 of client __innit__()
         PROBLEM: The API is not capable of receiving task objects
         Solution: Let the API itself create a task in the container
+        send dataset to client
         '''
     @abstractmethod
     def execute(self):
@@ -98,7 +96,7 @@ class FCFS_scheduler(scheduler):
                     continue
                 for client in clients:
                     task = self.tasks.popleft()
-                    self._assisgn_task(client, task)
+                    self.assign_task(client, task)
                     pass
             print("no more tasks available. Waiting for clients to finish...")
             while (len(self.client_ids) != len(self.check_clients())):
