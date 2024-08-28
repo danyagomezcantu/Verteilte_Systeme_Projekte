@@ -1,3 +1,5 @@
+import time
+
 from flask import Flask
 from src.client.REST_API import API
 import docker
@@ -6,7 +8,7 @@ import requests
 dock = docker.from_env()
 apiclient = docker.APIClient()
 
-CONTAINER_PORT = 5000
+CONTAINER_PORT = "5000/tcp"
 def create_client(dock):
     try:
         container = dock.containers.run(
@@ -24,15 +26,16 @@ def _get_host_port(id):
        :param container_port: Der Port im Container (z.B. '5000/tcp')
        :return: Der zugewiesene Host-Port als String oder None, wenn nicht vorhanden
        """
-    # container = docker.containers.get(id)
-    # ports = container.attrs['NetworkSettings']['Ports']
-    # port_info = ports.get(CONTAINER_PORT)
-    # if port_info and port_info[0]:
-    #     return port_info[0]['HostPort']
-    # print("Error! could not retrieve Hostport")
-    # return None
-    result = apiclient.port(id, CONTAINER_PORT)
-    print(result)
+    container = dock.containers.get(id)
+    ports = container.attrs['NetworkSettings']['Ports']
+    print(ports)
+    port_info = ports.get(CONTAINER_PORT)
+    if port_info and port_info[0]:
+        return port_info[0]['HostPort']
+    print("Error! could not retrieve Hostport")
+    return None
+    # result = apiclient.port(id, CONTAINER_PORT)
+    # print(result)
 def _get_client_ip(id):
     hostport = _get_host_port(id)
     print(f"hostport:{hostport}")
@@ -42,6 +45,7 @@ def _get_client_ip(id):
 
 if __name__ == '__main__':
     client = create_client(dock)
+    time.sleep(5)
     print(f"client ID:{client}")
     client_ip = _get_client_ip(client)
     url = f"{client_ip}/status"

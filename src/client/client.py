@@ -49,12 +49,12 @@ class client():
         '''
         self.terminated = 1
     def get_status(self):
-        return self.status
+        return self.status.value
     def start(self):
         print("test")
         ''' TODO: I think the connect the API needs to be started here'''
         #TODO: Do we make adding tasks dependend on the state or the queue itself?
-        self.status = status.WORKING
+        self.status = status.WAITING
         while not self.terminated:
             if self._tasks_available():
                 task = self.tasks.get()
@@ -85,4 +85,3 @@ if __name__ == '__main__':
     client_thread = threading.Thread(target=client.start)
     client_thread.start()
     api.run()
-    client.start()

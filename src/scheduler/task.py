@@ -8,7 +8,7 @@ from abc import ABC, abstractmethod
 1:  O(n)
 '''
 class task(ABC):
-    def __init__(self, dataset, time_complexity):
+    def __init__(self, dataset, time_complexity = None):
         self.dataset = dataset
         self.time_complexity = time_complexity
         self.time = None

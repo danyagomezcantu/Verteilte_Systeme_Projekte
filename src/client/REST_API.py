@@ -1,5 +1,5 @@
 from flask import Flask, jsonify, request
-#from src/scheduler stuff import task.py
+#from src/scheduler import task.py
 '''
 Because the client runs an infinite loop I decided to make the API an external object which acts as it's own.
 The client owns the API as an object attribute. The API receives the Client as an argument to access the clients values.
