@@ -89,21 +89,28 @@ class FCFS_scheduler(scheduler):
     First Come First Serve implementation of scheduler class
     '''
     def execute(self):
-        if len(self.check_clients()) > 0:           #"clients available?"
-            while len(self.tasks) > 0:              #"tasks available?"
-                clients = self.check_clients()
-                if clients == []:
-                    continue
-                for client in clients:
-                    task = self.tasks.popleft()
-                    self.assign_task(client, task)
-                    pass
-            print("no more tasks available. Waiting for clients to finish...")
-            while (len(self.client_ids) != len(self.check_clients())):
-                #This loop waits until all clients are done
+        '''
+        The FCFS scheduler checks whether tasks are left to assign,
+        then what clients are available and assigns them.
+        When all tasks are assigned the scheduler waits for the clients to finish theirs
+        and shuts them down when they are.
+        Whether the client is available is defined by
+        TODO: definie clients availability
+        '''
+        while len(self.tasks) > 0:
+            clients = self.check_clients()
+            if clients == []:
                 continue
-            for client in self.client_ids:
-                self.terminate_clients()
+            for client in clients:
+                task = self.tasks.popleft()
+                self.assign_task(client, task)
                 pass
-        else:
-            print('No clients available')
+        print("no more tasks available. Waiting for clients to finish...")
+        while (len(self.client_ids) != len(self.check_clients())):
+            #This loop waits until all clients are done
+            continue
+        for client in self.client_ids:
+            self.terminate_clients()
+            pass
+        '''
+        TODO (optional): Implement safety measures to assure that clients have successfully shut down.'''
