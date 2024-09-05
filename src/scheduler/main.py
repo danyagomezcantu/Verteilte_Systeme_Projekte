@@ -1,8 +1,8 @@
 import numpy as np
 import pandas as pd
-from task import *
 from scheduler import *
 import docker
+from src.client.task import task
 
 '''
 The main will be executed on the comuter itself.
@@ -16,19 +16,11 @@ The main will be executed on the comuter itself.
 def select_scheduler(tasks, clients):
     print("Finally what kind of scheduler do you want to use?")
     print("Option 1:    First Come First Serve")
-    #print("Option 2:    Shortest Job First")
-    #print("Option 3:    Round Robin")
     option = input()
     match option:
         case "1":
             #create FCFS scheduler
             return FCFS_scheduler(tasks,clients)
-        # case "2":
-        #     create SJF scheduler
-        #     return
-        # case "3":
-        #     create round robin scheduler
-        #     return
         case default:
             print("wrong input please try again")
             select_scheduler()

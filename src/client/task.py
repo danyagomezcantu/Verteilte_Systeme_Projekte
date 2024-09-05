@@ -8,12 +8,13 @@ from abc import ABC, abstractmethod
 1:  O(n)
 '''
 class task(ABC):
-    def __init__(self, dataset, time_complexity = None):
+    def __init__(self, dataset, time_complexity = None, alt = None):
         self.dataset = dataset
         self.time_complexity = time_complexity
         self.time = None
         self._start_time = None
         self._end_time = None
+        self.alt = alt
     def _taketime(self):
         self.time = self._end_time - self._start_time  # corrected time calculation
     def _start(self):
@@ -38,14 +39,14 @@ Tier 3 complexities:
 '''
 class bubble_sort(task):
     def __init__(self, dataset):
-        super().__init__(dataset, time_complexity=3)  # Calls task.__init__()
+        super().__init__(dataset, time_complexity=3, alt="bubble")  # Calls task.__init__()
 
     def _sort(self):
         sorting.bubble(self.dataset)
 
 class insertion_sort(task):
     def __init__(self, dataset):
-        super().__init__(dataset, time_complexity=3)  # Calls task.__init__()
+        super().__init__(dataset, time_complexity=3, alt="insert")  # Calls task.__init__()
 
     def _sort(self):
         arr = self.dataset
@@ -60,7 +61,7 @@ class insertion_sort(task):
 
 class selection_sort(task):
     def __init__(self, dataset):
-        super().__init__(dataset, time_complexity=3)
+        super().__init__(dataset, time_complexity=3, alt="select")
 
     def _sort(self):
         sorting.selection(self.dataset)
@@ -73,21 +74,21 @@ Tier 2 complexities:
 '''
 class merge_sort(task):
     def __init__(self, dataset):
-        super().__init__(dataset, time_complexity=2)  # Calls task.__init__()
+        super().__init__(dataset, time_complexity=2, alt="merge")  # Calls task.__init__()
 
     def _sort(self):
         sorting.merge(self.dataset)
 
 class quick_sort(task):
     def __init__(self, dataset):
-        super().__init__(dataset, time_complexity=2)  # Calls task.__init__()
+        super().__init__(dataset, time_complexity=2, alt="quick")  # Calls task.__init__()
 
     def _sort(self):
         sorting.quick(self.dataset)
 
 class heap_sort(task):
     def __init__(self, dataset):
-        super().__init__(dataset, time_complexity=2)  # Calls task.__init__()
+        super().__init__(dataset, time_complexity=2, alt="heap")  # Calls task.__init__()
 
     def _sort(self):
         sorting.heap(self.dataset)  # assuming there is a heap sort function in sorting module
@@ -101,18 +102,18 @@ Tier 1 complexities:
 
 class counting_sort(task):
     def __init__(self, dataset):
-        super().__init__(dataset,time_complexity=1)
+        super().__init__(dataset,time_complexity=1, alt="count")
 
     def _sort(self):
         pass
 class radix_sort(task):
     def __init__(self, dataset):
-        super().__init__(dataset, time_complexity=1)
+        super().__init__(dataset, time_complexity=1, alt="radix")
     def _sort(self):
         sorting.counting(self.dataset)
 class bucket_sort(task):
     def __init__(self, dataset):
-        super().__init__(dataset, time_complexity=1)
+        super().__init__(dataset, time_complexity=1, alt="bucket")
     def _sort(self):
         sorting.bucket(self.dataset)
 

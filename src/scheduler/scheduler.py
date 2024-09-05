@@ -1,4 +1,4 @@
-from task import *
+from src.client.task import *
 from collections import deque
 from enum import Enum
 import requests
@@ -33,6 +33,15 @@ def _get_client_ip(id):
 class status(Enum):
     WORKING = "working"
     WAITING = "waiting"
+
+def task_to_json():
+    '''
+    return json:
+    -alt: string
+    -dataset: array
+    '''
+    pass
+
 class scheduler(ABC):
     def __init__(self, tasks, clients):
         #converts an array into a queue
@@ -51,6 +60,8 @@ class scheduler(ABC):
         PROBLEM: The API is not capable of receiving task objects
         Solution: Let the API itself create a task in the container
         send dataset to client
+
+        call task_to_json() here.
         '''
     @abstractmethod
     def execute(self):
