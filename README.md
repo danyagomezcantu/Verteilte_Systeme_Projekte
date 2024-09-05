@@ -20,7 +20,7 @@ The project was initiated with the following goals:
 ## What Has Been Implemented
 
 ### Implemented Features:
-- **First-Come, First-Served (FCFS) Scheduling:** The FCFS scheduling algorithm has been successfully implemented. It provides a simple, non-preemptive approach where tasks are executed in the order they arrive.
+- **First-Come, First-Served (FCFS) Scheduling:** The FCFS scheduling algorithm has been implemented. It provides a simple, non-preemptive approach where tasks are executed in the order they arrive.
 - **Dockerized Environment:** The project includes a Docker setup where each client runs in its own container, simulating a distributed system.
 - **RESTful API:** A basic REST API has been developed using Flask, enabling task distribution and status monitoring across the clients.
 
