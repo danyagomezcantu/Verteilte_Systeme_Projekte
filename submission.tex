@@ -127,8 +127,8 @@ Scheduling algorithms are a great feature to test and determine the efficiency a
 In non-preemptive scheduling, once a task starts, it runs to completion without interruption. Algorithms like First-Come, First-Served (FCFS) and Shortest Job Next (SJN) follow this approach, offering simplicity and fairness, but at the cost of flexibility \cite{Tyagi & Gupta, 2018}. Preemptive scheduling, on the other hand, allows tasks to be interrupted and resumed later, making it more responsive to higher-priority tasks. Strategies like Shortest Remaining Time (SRT) and Round Robin are examples of preemptive approaches that optimize system responsiveness and resource allocation \cite{Jalali et al., 2024}.\\
 
 For our project, we selected FCFS. Since it's non-preemptive, it made a suitable choice for a proof-of-concept system where clarity and ease of use were prioritized \cite{Tyagi & Gupta, 2018}.
-%\subsubsection{Wait time}
-
+\subsubsection{Wait time}
+Wait time is the time a process needs to wait until it starts. For example, if task 1, 2 and 3 are processed successively by the First Come First Serve algorithm and task 1 takes 8ms processing time then process 2 has to wait 8ms as well. The wait time for process 3 is the sum of process 1&2's processing time.
 \subsection{Docker}
 \subsubsection{What is Docker?}
 
